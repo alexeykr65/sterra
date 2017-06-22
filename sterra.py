@@ -21,7 +21,6 @@ sterraConfig = dict()
 flagFullMesh = 0
 flagCentral = 1
 
-
 fileName = ""
 keyPreShare = ""
 nameInterface = ""
