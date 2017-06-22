@@ -9,8 +9,6 @@ import argparse
 import string
 import re
 import random
-#from colorama import Fore, Style
-#import paramiko
 
 description = "sterra: Generate IPSec configuration for S-Terra from source data"
 epilog = "ciscoblog.ru"
