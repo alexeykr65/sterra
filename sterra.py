@@ -68,7 +68,7 @@ def cmdArgsParser():
     parser = argparse.ArgumentParser(description=description, epilog=epilog)
     parser.add_argument('-f', '--file', help='File name with source data', dest="fileName", default='sterra.conf')
     parser.add_argument('-k', '--key', help='Key Preshare for crypto isakmp', dest="keyPreShare", default="")
-    parser.add_argument('-i', '--interface', help='Name of interfaces (default GigabitEthernet)', action="store",  dest="nameInterface", default="GigabitEthernet")
+    parser.add_argument('-i', '--interface', help='Name of interfaces (default GigabitEthernet)', action="store", dest="nameInterface", default="GigabitEthernet")
     parser.add_argument('-d', '--debug', help='Debug information view(default =1, 2- more verbose', dest="flagDebug", default=1)
     parser.add_argument('-m', '--mesh', help='Enable Full Mesh(default = disable', action="store_true")
     parser.add_argument('-l2', '--l2vpn', help='Generate configuration for L2 VPN', action="store_true")
@@ -101,14 +101,14 @@ def invertIpMask(stMsk):
     invMsk = ""
     flagLastOctet = 0
     for octetIP in stMsk.split('.'):
-        invMsk += str((255-int(octetIP)))
+        invMsk += str((255 - int(octetIP)))
         flagLastOctet += 1
         if flagLastOctet != 4: invMsk += '.'
     return invMsk
 
 
 def fileConfigAnalyze():
-    if flagDebug > 0: print "Analyze source file : " + fileName +" ..."
+    if flagDebug > 0: print "Analyze source file : " + fileName + " ..."
     f = open(fileName, 'r')
     numSterra = 0
 
@@ -149,12 +149,12 @@ def createConfigFile():
     flagCentral = 1
     # Create Configuration file
     for nameSterra in sterraConfig:
-        print "=========================" + " Name file: " + nameSterra+" ============================"
-        fw = open("config_"+nameSterra+'.txt', 'w')
+        print "=========================" + " Name file: " + nameSterra + " ============================"
+        fw = open("config_" + nameSterra + '.txt', 'w')
         fw.write("hostname " + nameSterra + "\n\n")
         # Isakmp Policy create
         for sLine in isakmpPolicy:
-            fw.write(sLine+"\n")
+            fw.write(sLine + "\n")
         fw.write("\n")
 
         # crypto key create
@@ -189,10 +189,10 @@ def createConfigFile():
                     if(flagL2vpn == 0):
                         for ipAddressLocal in sterraConfig[nameSterra]['internal_lan'].split(','):
                             for ipAddressRemote in sterraConfig[remoteName]['internal_lan'].split(','):
-                                if flagDebug > 1: print " IP address Local  : " + str(ipAddressLocal.split('/')[0]) + " Mask : "+str(ipAddressLocal.split('/')[1]) + " invMask "+invertIpMask(str(ipAddressLocal.split('/')[1]))
-                                if flagDebug > 1: print " IP address Remote : " + str(ipAddressRemote.split('/')[0]) + " Mask : "+str(ipAddressRemote.split('/')[1]) + " invMask "+invertIpMask(str(ipAddressRemote.split('/')[1]))
-                                fw.write(" permit ip " + str(ipAddressLocal.split('/')[0]) + "  " + invertIpMask(str(ipAddressLocal.split('/')[1])))
-                                fw.write("  " + str(ipAddressRemote.split('/')[0]) + "  " + invertIpMask(str(ipAddressRemote.split('/')[1])))
+                                if flagDebug > 1: print " IP address Local  : " + str(ipAddressLocal.split('/')[0]) + " Mask : " + str(ipAddressLocal.split('/')[1]) + " invMask " + invertIpMask(str(ipAddressLocal.split('/')[1]))
+                                if flagDebug > 1: print " IP address Remote : " + str(ipAddressRemote.split('/')[0]) + " Mask : " + str(ipAddressRemote.split('/')[1]) + " invMask " + invertIpMask(str(ipAddressRemote.split('/')[1]))
+                                fw.write(" permit ip " + str.strip(ipAddressLocal.split('/')[0]) + "  " + invertIpMask(str(ipAddressLocal.split('/')[1])))
+                                fw.write("  " + str.strip(ipAddressRemote.split('/')[0]) + "  " + invertIpMask(str(ipAddressRemote.split('/')[1])))
                                 fw.write("\n")
                     else:
                         fw.write(" permit ip host " + str(sterraConfig[nameSterra]['external_interface'].split('/')[0]) + " host  " + str(sterraConfig[remoteName]['external_interface'].split('/')[0]))
@@ -251,7 +251,7 @@ def createConfigFile():
                         if flagDebug > 1: print " Gateway address  : " + str(sterraConfig[nameSterra]['external_interface'])
                         fw.write("! Ip route to " + remoteName + "\n")
                         for ipAddressRemote in sterraConfig[remoteName]['internal_lan'].split(','):
-                            if flagDebug > 1: print " IP address Remote : " + str(ipAddressRemote.split('/')[0]) + " Mask : "+str(ipAddressRemote.split('/')[1])
+                            if flagDebug > 1: print " IP address Remote : " + str(ipAddressRemote.split('/')[0]) + " Mask : " + str(ipAddressRemote.split('/')[1])
                             fw.write("ip route " + str(ipAddressRemote.split('/')[0]) + "  " + str(ipAddressRemote.split('/')[1]))
                             fw.write("  " + str(sterraConfig[remoteName]['external_interface'].split('/')[0]))
                             fw.write("\n")
